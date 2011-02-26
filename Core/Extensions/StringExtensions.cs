@@ -6,6 +6,8 @@ namespace Griz.Core.Extensions
 	{
 		public static string Left(this string instance, int length)
 		{
+            if (length > instance.Length) return instance;
+
 			return length <= 0
 				? instance
 				: instance.Substring(0, length);
@@ -20,12 +22,10 @@ namespace Griz.Core.Extensions
 
 		public static bool ToBoolean(this char instance)
 		{
-			if (instance == 'Y') return true;
-
-			return false;
+		    return instance == 'Y';
 		}
 
-		public static int ToInt32(this string instance)
+	    public static int ToInt32(this string instance)
 		{
 			return Convert.ToInt32(instance);
 		}
