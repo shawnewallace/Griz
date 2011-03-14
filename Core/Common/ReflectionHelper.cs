@@ -1,169 +1,128 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace Griz.Core.Extensions {
-    public static class ReflectionHelper {
+namespace Griz.Core.Common
+{
+	public static class ReflectionHelper
+	{
 
-        /// <summary>
-        /// Strongly-typed mechanism for obtaining the name of a class property as a string.
-        /// </summary>
-        /// <example>
-        /// </example>
-        public static String GetPropertyName<TClass, TProp>(
-            Expression<Func<TClass, TProp>> propertySelector) {
+		/// <summary>
+		/// Strongly-typed mechanism for obtaining the name of a class property as a string.
+		/// </summary>
+		/// <example>
+		/// </example>
+		public static String GetPropertyName<TClass, TProp>(
+				Expression<Func<TClass, TProp>> propertySelector)
+		{
 
-            var memberExpression = propertySelector.Body as MemberExpression;
+			var memberExpression = propertySelector.Body as MemberExpression;
 
-            return (memberExpression != null)
-                ? memberExpression.Member.Name
-                : String.Empty;
-        }
-    }
+			return (memberExpression != null)
+					? memberExpression.Member.Name
+					: String.Empty;
+		}
 
-    //Copyright (C) Microsoft Corporation.  All rights reserved.
-    // From Linq Samples
-    public class ObjectDumper {
+		public static PropertyInfo FindProperty(LambdaExpression lambdaExpression)
+		{
+			Expression expressionToCheck = lambdaExpression;
 
-        public static void Write(object element) {
-            Write(element, 0);
-        }
+			bool done = false;
 
-        public static void Write(object element, int depth) {
-            Write(element, depth, Console.Out);
-        }
+			while (!done)
+			{
+				switch (expressionToCheck.NodeType)
+				{
+					case ExpressionType.Convert:
+						expressionToCheck = ((UnaryExpression)expressionToCheck).Operand;
+						break;
+					case ExpressionType.Lambda:
+						expressionToCheck = lambdaExpression.Body;
+						break;
+					case ExpressionType.MemberAccess:
+						var propertyInfo = ((MemberExpression)expressionToCheck).Member as PropertyInfo;
+						return propertyInfo;
+					default:
+						done = true;
+						break;
+				}
+			}
 
-        public static void Write(object element, int depth, TextWriter log) {
-            var dumper = new ObjectDumper(depth) {_writer = log};
-            dumper.WriteObject(null, element);
-        }
+			return null;
+		}
 
-        TextWriter _writer;
-        int _pos;
-        int _level;
-        readonly int _depth;
+		/// <summary>
+		/// Allows string-based access to an object's properties.
+		/// </summary>
+		//public static object GetPropertyValue(this object instance, string propertyName)
+		//{
+		//  var propertyValue = instance
+		//      .GetType()
+		//      .GetProperty(propertyName)
+		//      .GetValue(instance, null);
 
-        private ObjectDumper(int depth) {
-            _depth = depth;
-        }
+		//  return propertyValue;
+		//}
 
-        private void Write(string s) {
-            if (s == null) return;
-            
-            _writer.Write(s);
-            _pos += s.Length;
-        }
+		/// <summary>
+		/// Allows string-based access to an object's properties.
+		/// </summary>
+		public static T GetPropertyValue<T>(this object instance, string propertyName)
+		{
+			var propertyValue = (T)instance.GetPropertyValue(propertyName);
+			return propertyValue;
+		}
 
-        private void WriteIndent() {
-            for (var i = 0; i < _level; i++) _writer.Write("  ");
-        }
+		/// <summary>
+		/// Allows string-based access to an object's properties.
+		/// </summary>
+		public static void SetProperty(this object instance, string propertyName, object propertyValue)
+		{
+			var t = instance.GetType();
+			if (t.IsNullOrEmpty())
+			{
+				throw new ApplicationException("Cannot find type.");
+			}
 
-        private void WriteLine() {
-            _writer.WriteLine();
-            _pos = 0;
-        }
+			var p = t.GetProperty(propertyName);
+			if (p.IsNullOrEmpty())
+			{
+				throw new ApplicationException("Cannot get type for property: " + propertyName);
+			}
 
-        private void WriteTab() {
-            Write("\t");
-            //while (pos % 8 != 0) Write(" ");
-        }
+			if (propertyValue.IsNotNullOrEmpty())
+			{
+				var val = Convert.ChangeType(propertyValue, p.PropertyType);
+				p.SetValue(instance, val, null);
+			}
 
-        private void WriteObject(string prefix, object element) {
-            if (element == null || element is ValueType || element is string) {
-                WriteIndent();
-                Write(prefix);
-                WriteValue(element);
-                WriteLine();
-            } else {
-                var enumerableElement = element as IEnumerable;
-                if (enumerableElement != null) {
-                    foreach (object item in enumerableElement) {
-                        if (item is IEnumerable && !(item is string)) {
-                            WriteIndent();
-                            Write(prefix);
-                            Write("...");
-                            WriteLine();
-                            if (_level < _depth) {
-                                _level++;
-                                WriteObject(prefix, item);
-                                _level--;
-                            }
-                        } else {
-                            WriteObject(prefix, item);
-                        }
-                    }
-                } else {
-                    var members = element.GetType().GetMembers(BindingFlags.Public | BindingFlags.Instance);
-                    WriteIndent();
-                    Write(prefix);
-                    var propWritten = false;
-                    foreach (var m in members) {
-                        try {
-                            var f = m as FieldInfo;
-                            var p = m as PropertyInfo;
-                            if (f != null || p != null) {
-                                if (propWritten) {
-                                    WriteLine();
-                                } else {
-                                    propWritten = true;
-                                }
-                                Write(m.Name);
-                                Write("=");
-                                Type t = f != null ? f.FieldType : p.PropertyType;
-                                if (t.IsValueType || t == typeof(string)) {
-                                    try {
-                                        WriteValue(f != null ? f.GetValue(element) : p.GetValue(element, null));
-                                    } catch (TargetParameterCountException) {
-                                        WriteValue("!EX!");
-                                    }
-                                } else {
-                                    if (typeof(IEnumerable).IsAssignableFrom(t)) {
-                                        Write("...");
-                                    } else {
-                                        Write("{ }");
-                                    }
-                                }
-                            }
-                        } catch (Exception) {
-                            Write("!!ERR!!");
-                        }
-                    }
-                    if (propWritten) WriteLine();
-                    if (_level < _depth) {
-                        foreach (MemberInfo m in members) {
-                            FieldInfo f = m as FieldInfo;
-                            PropertyInfo p = m as PropertyInfo;
-                            if (f != null || p != null) {
-                                Type t = f != null ? f.FieldType : p.PropertyType;
-                                if (!(t.IsValueType || t == typeof(string))) {
-                                    object value = f != null ? f.GetValue(element) : p.GetValue(element, null);
-                                    if (value != null) {
-                                        _level++;
-                                        WriteObject(m.Name + ": ", value);
-                                        _level--;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
+		}
 
-        private void WriteValue(object o) {
-            if (o == null) {
-                Write("null");
-            } else if (o is DateTime) {
-                Write(((DateTime)o).ToShortDateString());
-            } else if (o is ValueType || o is string) {
-                Write(o.ToString());
-            } else if (o is IEnumerable) {
-                Write("...");
-            } else {
-                Write("{ }");
-            }
-        }
-    }
+		/// <summary>
+		/// Returns a collection of static fields (e.g. constants) starting with a specified prefix.
+		/// </summary>
+		public static IEnumerable<FieldInfo> GetConstantsStartingWith(this Type type, string nameStartsWith)
+		{
+			var fields = type
+					.GetFields(BindingFlags.Static | BindingFlags.GetField | BindingFlags.Public)
+					.Where(f => f.Name.StartsWith(nameStartsWith));
+
+			foreach (var field in fields)
+				yield return field;
+		}
+
+		public static string Dump(this object instance, int maxDepth)
+		{
+			var writer = new StringWriter();
+			ObjectDumper.Write(instance, maxDepth, writer);
+			return writer.ToString();
+		}
+	}
+
+	//Copyright (C) Microsoft Corporation.  All rights reserved.
+	// From Linq Samples
 }

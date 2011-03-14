@@ -5,12 +5,12 @@ using Griz.Core.Bases;
 
 namespace Griz.Core.Common
 {
-	public static class UINameHelper
+	public static class UiNameHelper
 	{
 		public static string BuildIdFrom(Expression expression, object value)
 		{
 			if (value is Enumeration)
-				value = ((Enumeration) value).Value;
+				value = ((Enumeration)value).Value;
 
 			return string.Format("{0}_{1}", BuildIdFrom(expression), value);
 		}
@@ -41,15 +41,15 @@ namespace Griz.Core.Common
 					case ExpressionType.Convert:
 
 						accessedMember = false;
-						expressionToCheck = ((UnaryExpression) expressionToCheck).Operand;
+						expressionToCheck = ((UnaryExpression)expressionToCheck).Operand;
 
 						break;
 					case ExpressionType.ArrayIndex:
-						var binaryExpression = (BinaryExpression) expressionToCheck;
+						var binaryExpression = (BinaryExpression)expressionToCheck;
 
 						Expression indexExpression = binaryExpression.Right;
 						Delegate indexAction = Expression.Lambda(indexExpression).Compile();
-						var value = (int) indexAction.DynamicInvoke();
+						var value = (int)indexAction.DynamicInvoke();
 
 						if (accessedMember)
 						{
@@ -63,12 +63,12 @@ namespace Griz.Core.Common
 
 						break;
 					case ExpressionType.Lambda:
-						var lambdaExpression = (LambdaExpression) expressionToCheck;
+						var lambdaExpression = (LambdaExpression)expressionToCheck;
 						accessedMember = false;
 						expressionToCheck = lambdaExpression.Body;
 						break;
 					case ExpressionType.MemberAccess:
-						var memberExpression = (MemberExpression) expressionToCheck;
+						var memberExpression = (MemberExpression)expressionToCheck;
 
 						if (accessedMember)
 						{
@@ -112,24 +112,24 @@ namespace Griz.Core.Common
 				switch (expressionToCheck.NodeType)
 				{
 					case ExpressionType.Convert:
-						expressionToCheck = ((UnaryExpression) expressionToCheck).Operand;
+						expressionToCheck = ((UnaryExpression)expressionToCheck).Operand;
 						break;
 					case ExpressionType.ArrayIndex:
-						var binaryExpression = (BinaryExpression) expressionToCheck;
+						var binaryExpression = (BinaryExpression)expressionToCheck;
 
 						Expression indexExpression = binaryExpression.Right;
 						Delegate indexAction = Expression.Lambda(indexExpression).Compile();
 
-						indexValue = (int) indexAction.DynamicInvoke();
+						indexValue = (int)indexAction.DynamicInvoke();
 						done = true;
 
 						break;
 					case ExpressionType.Lambda:
-						var lambdaExpression = (LambdaExpression) expressionToCheck;
+						var lambdaExpression = (LambdaExpression)expressionToCheck;
 						expressionToCheck = lambdaExpression.Body;
 						break;
 					case ExpressionType.MemberAccess:
-						var memberExpression = (MemberExpression) expressionToCheck;
+						var memberExpression = (MemberExpression)expressionToCheck;
 						expressionToCheck = memberExpression.Expression;
 						break;
 					default:
@@ -156,15 +156,15 @@ namespace Griz.Core.Common
 					case ExpressionType.Convert:
 
 						accessedMember = false;
-						expressionToCheck = ((UnaryExpression) expressionToCheck).Operand;
+						expressionToCheck = ((UnaryExpression)expressionToCheck).Operand;
 
 						break;
 					case ExpressionType.ArrayIndex:
-						var binaryExpression = (BinaryExpression) expressionToCheck;
+						var binaryExpression = (BinaryExpression)expressionToCheck;
 
 						Expression indexExpression = binaryExpression.Right;
 						Delegate indexAction = Expression.Lambda(indexExpression).Compile();
-						var value = (int) indexAction.DynamicInvoke();
+						var value = (int)indexAction.DynamicInvoke();
 
 						if (accessedMember)
 						{
@@ -178,12 +178,12 @@ namespace Griz.Core.Common
 
 						break;
 					case ExpressionType.Lambda:
-						var lambdaExpression = (LambdaExpression) expressionToCheck;
+						var lambdaExpression = (LambdaExpression)expressionToCheck;
 						accessedMember = false;
 						expressionToCheck = lambdaExpression.Body;
 						break;
 					case ExpressionType.MemberAccess:
-						var memberExpression = (MemberExpression) expressionToCheck;
+						var memberExpression = (MemberExpression)expressionToCheck;
 
 						if (accessedMember)
 						{

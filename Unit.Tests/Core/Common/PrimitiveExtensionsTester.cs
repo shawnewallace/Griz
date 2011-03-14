@@ -87,10 +87,10 @@ namespace Griz.Unit.Tests.Core.Common
 		{
 			string dummy = "http://jeffreypalermo.com/&Id=1";
 			string shouldEqual = "http://jeffreypalermo.com/&amp;Id=1";
-			Assert.That(dummy.ToXHTMLLink(), Is.EqualTo(shouldEqual));
+			Assert.That(dummy.ToXhtmlLink(), Is.EqualTo(shouldEqual));
 
 			string nullString = null;
-			nullString.ToXHTMLLink().ShouldEqual(string.Empty);
+			nullString.ToXhtmlLink().ShouldEqual(string.Empty);
 		}
 
 		[Test]

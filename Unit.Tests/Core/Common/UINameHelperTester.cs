@@ -14,21 +14,21 @@ namespace Griz.Unit.Tests.Core.Common
 		public void Should_build_name_from_basic_expression()
 		{
 			Expression<Func<Stub, object>> expression = f => f.Name;
-			UINameHelper.BuildNameFrom(expression).ShouldEqual("Name");
+			UiNameHelper.BuildNameFrom(expression).ShouldEqual("Name");
 		}
 
 		[Test]
 		public void Should_build_name_from_indexed_expression()
 		{
 			Expression<Func<Stub, object>> expression = f => f.Subs[5].Number;
-			UINameHelper.BuildNameFrom(expression).ShouldEqual("Subs[5].Number");
+			UiNameHelper.BuildNameFrom(expression).ShouldEqual("Subs[5].Number");
 		}
 
 		[Test]
 		public void Should_build_name_for_enumerated_input()
 		{
 			Expression<Func<Stub, object>> expression = f => f.EnumProp;
-			UINameHelper.BuildIdFrom(expression, TestEnum.Test).ShouldEqual("EnumProp_1");
+			UiNameHelper.BuildIdFrom(expression, TestEnum.Test).ShouldEqual("EnumProp_1");
 		}
 
 		[Test]
@@ -37,8 +37,8 @@ namespace Griz.Unit.Tests.Core.Common
 			Expression<Func<Stub, object>> expression1 = f => f.Name;
 			Expression<Func<Stub, object>> expression2 = f => f.Subs[5].Number;
 
-			UINameHelper.ExtractIndexValueFrom(expression1).ShouldBeNull();
-			UINameHelper.ExtractIndexValueFrom(expression2).ShouldEqual(5);
+			UiNameHelper.ExtractIndexValueFrom(expression1).ShouldBeNull();
+			UiNameHelper.ExtractIndexValueFrom(expression2).ShouldEqual(5);
 		}
 
 		public class Stub

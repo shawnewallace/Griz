@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-namespace Heuristics.LearningBuilder.Extensions {
+namespace Griz.Core.Common {
 	public static class FormattingExtensions {
 		public static string ToCurrencyFormat(this decimal p_value) {
 			// todo: We should format the value according to the current culture, but on my 

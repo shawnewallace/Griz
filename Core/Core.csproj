@@ -49,33 +49,32 @@
     <Compile Include="Bases\IGloballyUnique.cs" />
     <Compile Include="Bases\PersistentObject.cs" />
     <Compile Include="Common\AttributeExtensions.cs" />
+    <Compile Include="Common\AutoMapperExtensions.cs" />
+    <Compile Include="Common\BooleanExtensions.cs" />
+    <Compile Include="Common\DateFormatExtensions.cs" />
     <Compile Include="Common\EnumerableExtensions.cs" />
     <Compile Include="Common\ExpressionHelper.cs" />
     <Compile Include="Common\Format.cs" />
+    <Compile Include="Common\FormattingExtensions.cs" />
+    <Compile Include="Common\ObjectDumper.cs" />
     <Compile Include="Common\ObjectExtensions.cs" />
     <Compile Include="Common\PrimitiveExtensions.cs" />
     <Compile Include="Common\QueryLimitExtensions.cs" />
-    <Compile Include="Common\ReflectionExtensions.cs" />
+    <Compile Include="Common\ReflectionHelper.cs" />
+    <Compile Include="Common\StringExtensions.cs" />
     <Compile Include="Common\TimeExtensions.cs" />
     <Compile Include="Common\UINameHelper.cs" />
     <Compile Include="Domain\Bases\ChangeAuditInfo.cs" />
     <Compile Include="Domain\Bases\IAuditable.cs" />
     <Compile Include="Domain\Model\ValueObject.cs" />
-    <Compile Include="Extensions\AutoMapperExtensions.cs" />
-    <Compile Include="Extensions\BooleanExtensions.cs" />
-    <Compile Include="Extensions\EnumerableExtensions.cs" />
-    <Compile Include="Extensions\DateFormatExtensions.cs" />
-    <Compile Include="Extensions\ObjectExtensions.cs" />
-    <Compile Include="Extensions\ReflectionExtensions.cs" />
-    <Compile Include="Extensions\ReflectionHelper.cs" />
-    <Compile Include="Extensions\RepositoryIQueryableExtensions.cs" />
-    <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Extensions\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

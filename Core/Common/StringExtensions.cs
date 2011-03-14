@@ -1,12 +1,12 @@
 ﻿using System;
 
-namespace Griz.Core.Extensions
+namespace Griz.Core.Common
 {
 	public static class StringExtensions
 	{
 		public static string Left(this string instance, int length)
 		{
-            if (length > instance.Length) return instance;
+			if (length > instance.Length) return instance;
 
 			return length <= 0
 				? instance
@@ -22,10 +22,10 @@ namespace Griz.Core.Extensions
 
 		public static bool ToBoolean(this char instance)
 		{
-		    return instance == 'Y';
+			return instance == 'Y' || instance == 'y';
 		}
 
-	    public static int ToInt32(this string instance)
+		public static int ToInt32(this string instance)
 		{
 			return Convert.ToInt32(instance);
 		}

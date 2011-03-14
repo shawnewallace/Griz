@@ -1,4 +1,4 @@
-﻿namespace Griz.Core.Extensions
+﻿namespace Griz.Core.Common
 {
 	public static class BooleanExtensions
 	{

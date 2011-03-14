@@ -9,29 +9,26 @@ namespace Griz.Core.Common
 	{
 		public static bool ToBool(this bool? value)
 		{
-			if (value == null)
-				return false;
-			return value.Value;
+			return value != null && value.Value;
 		}
 
-		public static string ToXHTMLLink(this string url)
+		public static string ToXhtmlLink(this string url)
 		{
 			return !string.IsNullOrEmpty(url) ? url.Replace("&", "&amp;") : string.Empty;
 		}
 
 		public static string ToStandardDate(this DateTime? value, string valueIfNull)
 		{
-			if (value.HasValue) return value.Value.ToString("MM/dd/yyyy");
-			return valueIfNull;
+			return value.HasValue ? value.Value.ToString("MM/dd/yyyy") : valueIfNull;
 		}
 
 		public static string ToFormattedString(this TimeSpan value)
 		{
 			var list = new List<string>(3);
 
-			int days = value.Days;
-			int hours = value.Hours;
-			int minutes = value.Minutes;
+			var days = value.Days;
+			var hours = value.Hours;
+			var minutes = value.Minutes;
 
 			if (days > 1)
 				list.Add(String.Format("{0} days", days));
@@ -69,6 +66,7 @@ namespace Griz.Core.Common
 		public static string WrapEachWith(this IEnumerable values, string before, string after, string separator)
 		{
 			var list = new List<string>();
+
 			foreach (object value in values)
 			{
 				list.Add(string.Format("{0}{1}{2}", before, value, after));
@@ -79,7 +77,7 @@ namespace Griz.Core.Common
 		public static DateTime? ToNullableDate(this string value)
 		{
 			DateTime result;
-			return !DateTime.TryParse(value, out result) ? (DateTime?) null : result;
+			return !DateTime.TryParse(value, out result) ? (DateTime?)null : result;
 		}
 	}
 }

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using AutoMapper;
 
-namespace Griz.Core.Extensions {
+namespace Griz.Core.Common {
     
 	public static class AutoMapperExtensions {
 		

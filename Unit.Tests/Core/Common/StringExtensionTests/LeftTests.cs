@@ -1,7 +1,7 @@
-﻿using Griz.Core.Extensions;
+﻿using Griz.Core.Common;
 using NUnit.Framework;
 
-namespace Griz.Unit.Tests.ExtensionTests.StringExtensionTests
+namespace Griz.Unit.Tests.Core.Common.StringExtensionTests
 {
     [TestFixture]
     public class LeftTests
