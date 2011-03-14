@@ -49,8 +49,12 @@
     <Compile Include="Models\EntityBase.cs" />
     <Compile Include="Interfaces\IRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositories\LinqToSqlRepository.cs" />
+    <Compile Include="Repositories\LinqToSqlUnitOfWork.cs" />
     <Compile Include="Repositories\EFUnitOfWork.cs" />
     <Compile Include="Repositories\EFRepository.cs" />
+    <Compile Include="Repositories\nHibernateRepository.cs" />
+    <Compile Include="Repositories\nHibernateUnitOfWork.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

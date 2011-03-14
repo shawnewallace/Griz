@@ -3,68 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using Griz.Core.Common;
 
 namespace Griz.Core.Extensions {
     public static class ReflectionExtensions {
 
-        /// <summary>
-        /// Allows string-based access to an object's properties.
-        /// </summary>
-        public static object GetPropertyValue(this object instance, string propertyName) {
-            var propertyValue = instance
-                .GetType()
-                .GetProperty(propertyName)
-                .GetValue(instance, null);
-
-            return propertyValue;
-        }
-
-        /// <summary>
-        /// Allows string-based access to an object's properties.
-        /// </summary>
-        public static T GetPropertyValue<T>(this object instance, string propertyName) {
-            var propertyValue = (T)instance.GetPropertyValue(propertyName);
-            return propertyValue;
-        }
-
-        /// <summary>
-        /// Allows string-based access to an object's properties.
-        /// </summary>
-        public static void SetProperty(this object instance, string propertyName, object propertyValue) {
-            var t = instance.GetType();
-            if (t.IsNullOrEmpty()) {
-                throw new ApplicationException("Cannot find type.");
-            }
-
-            var p = t.GetProperty(propertyName);
-            if (p.IsNullOrEmpty()) {
-                throw new ApplicationException("Cannot get type for property: " + propertyName);
-            }
-
-            if (propertyValue.IsNotNullOrEmpty()) {
-                var val = Convert.ChangeType(propertyValue, p.PropertyType);
-                p.SetValue(instance, val, null);
-            }
-
-        }
-
-        /// <summary>
-        /// Returns a collection of static fields (e.g. constants) starting with a specified prefix.
-        /// </summary>
-        public static IEnumerable<FieldInfo> GetConstantsStartingWith(this Type type, string nameStartsWith) {
-            var fields = type
-                .GetFields(BindingFlags.Static | BindingFlags.GetField | BindingFlags.Public)
-                .Where(f => f.Name.StartsWith(nameStartsWith));
-
-            foreach (var field in fields)
-                yield return field;
-        }
-
-        public static string Dump(this object instance, int maxDepth)
-        {
-            var writer = new StringWriter();
-            ObjectDumper.Write(instance, maxDepth, writer);
-            return writer.ToString();
-        }
+        
     }
 }
